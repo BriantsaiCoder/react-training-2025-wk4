@@ -7,7 +7,7 @@
     "dev": "vite --open",
     "build": "vite build --mode development",
     "lint": "eslint .",
-    "preview": "vite preview --open",
+    "preview": "vite preview --open  --mode development",
     "deploy": "vite build --mode production && gh-pages -d dist"
   },
   "dependencies": {
