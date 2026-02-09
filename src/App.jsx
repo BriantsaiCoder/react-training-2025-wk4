@@ -3,6 +3,7 @@ import axios from 'axios';
 import * as bootstrap from 'bootstrap';
 import './assets/style.css';
 import ProductModal from './Components/ProductModal';
+import Pagination from './Components/Pagination';
 // API 設定
 const API_BASE = import.meta.env.VITE_API_BASE;
 const API_PATH = import.meta.env.VITE_API_PATH;
@@ -33,6 +34,7 @@ function App() {
   // Modal 控制相關狀態
   const productModalRef = useRef(null);
   const [modalType, setModalType] = useState(''); // "create", "edit", "delete"
+  const [pagination, setPagination] = useState({});
   // 產品表單資料模板
   const [templateData, setTemplateData] = useState(INITIAL_TEMPLATE_DATA);
   const handleInputChange = (e) => {
@@ -126,11 +128,12 @@ function App() {
     }
   };
   // 取得產品資料
-  const getData = async () => {
+  const getData = async (page = 1) => {
     try {
-      const response = await axios.get(`${API_BASE}/api/${API_PATH}/admin/products`);
+      const response = await axios.get(`${API_BASE}/api/${API_PATH}/admin/products?page=${page}`);
       // console.log('產品資料：', response.data);
       setProducts(response.data.products);
+      setPagination(response.data.pagination);
     } catch (err) {
       console.error('取得產品失敗：', err.response?.data?.message);
     }
@@ -341,6 +344,7 @@ function App() {
               )}
             </tbody>
           </table>
+          <Pagination pagination={pagination} changePage={getData} />
         </div>
       )}
       <ProductModal
