@@ -58,7 +58,7 @@ function Product_list({ products, openModal, INITIAL_TEMPLATE_DATA, pagination, 
             ))
           ) : (
             <tr>
-              <td colSpan='5'>尚無產品資料</td>
+              <td colSpan='6'>尚無產品資料</td>
             </tr>
           )}
         </tbody>
