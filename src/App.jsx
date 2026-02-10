@@ -3,7 +3,8 @@ import axios from 'axios';
 import * as bootstrap from 'bootstrap';
 import './assets/style.css';
 import ProductModal from './Components/ProductModal';
-import Pagination from './Components/Pagination';
+import Login from './Components/Login';
+import Product_list from './Components/Product_list';
 // API 設定
 const API_BASE = import.meta.env.VITE_API_BASE;
 const API_PATH = import.meta.env.VITE_API_PATH;
@@ -243,109 +244,16 @@ function App() {
     <>
       {!isAuth ? (
         // 登入表單畫面
-        <div className='container login'>
-          <div className='row justify-content-center'>
-            <h1 className='h3 mb-3 font-weight-normal'>請先登入</h1>
-            <div className='col-8'>
-              <form id='form' className='form-signin' onSubmit={(e) => handleSubmit(e)}>
-                <div className='form-floating mb-3'>
-                  <input
-                    type='email'
-                    className='form-control'
-                    name='username'
-                    placeholder='name@example.com'
-                    value={formData.username}
-                    onChange={(e) => handleInputChange(e)}
-                    required
-                    autoFocus
-                  />
-                  <label htmlFor='username'>Email address</label>
-                </div>
-                <div className='form-floating'>
-                  <input
-                    type='password'
-                    className='form-control'
-                    name='password'
-                    placeholder='Password'
-                    value={formData.password}
-                    onChange={(e) => handleInputChange(e)}
-                    required
-                  />
-                  <label htmlFor='password'>Password</label>
-                </div>
-                <button className='btn btn-lg btn-primary w-100 mt-3' type='submit'>
-                  登入
-                </button>
-              </form>
-            </div>
-          </div>
-          <p className='mt-5 mb-3 text-muted'>&copy; 2024~∞ - 六角學院</p>
-        </div>
+        <Login formData={formData} handleInputChange={handleInputChange} handleSubmit={handleSubmit} />
       ) : (
         // 登入後的產品管理頁面 (同第一週)
-        <div className='container'>
-          {/* 新增產品按鈕 */}
-          <div className='text-end mt-4'>
-            <button
-              type='button'
-              className='btn btn-primary'
-              onClick={() => openModal(INITIAL_TEMPLATE_DATA, 'create')}
-            >
-              建立新的產品
-            </button>
-          </div>
-          <h2>產品列表</h2>
-          <table className='table'>
-            <thead>
-              <tr>
-                <th>分類</th>
-                <th>產品名稱</th>
-                <th>原價</th>
-                <th>售價</th>
-                <th>是否啟用</th>
-                <th>編輯</th>
-              </tr>
-            </thead>
-            <tbody>
-              {products && products.length > 0 ? (
-                products.map((item) => (
-                  <tr key={item.id}>
-                    <td>{item.category}</td>
-                    <td>{item.title}</td>
-                    <td>{item.origin_price}</td>
-                    <td>{item.price}</td>
-                    <td className={`${item.is_enabled ? 'text-success' : ''}`}>
-                      {item.is_enabled ? '啟用' : '未啟用'}
-                    </td>
-                    <td>
-                      <div className='btn-group'>
-                        <button
-                          type='button'
-                          className='btn btn-outline-primary btn-sm'
-                          onClick={() => openModal(item, 'edit')}
-                        >
-                          編輯
-                        </button>
-                        <button
-                          type='button'
-                          className='btn btn-outline-danger btn-sm'
-                          onClick={() => openModal(item, 'delete')}
-                        >
-                          刪除
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan='5'>尚無產品資料</td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-          <Pagination pagination={pagination} changePage={getData} />
-        </div>
+        <Product_list
+          products={products}
+          openModal={openModal}
+          INITIAL_TEMPLATE_DATA={INITIAL_TEMPLATE_DATA}
+          pagination={pagination}
+          getData={getData}
+        />
       )}
       <ProductModal
         modalType={modalType}
